@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:id="@+id/childbtn"
+        android:text="Log IN As Women"
+        android:layout_margin="15dp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textSize="24dp"
+        android:fontFamily="sans-serif-condensed"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:backgroundTint="#000000"
+        android:id="@+id/cardofname"
+        android:visibility="gone"
+        android:layout_margin="15dp"
+        app:cardCornerRadius="25dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Your Name :"
+                android:textSize="24dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Name"
+                android:textSize="20dp"
+                android:id="@+id/nameedittext"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:textColor="@color/white"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_maincancel"
+                    android:layout_marginBottom="15dp"
+                    android:textSize="18dp"
+                    android:background="@drawable/glossy_card_background"
+                    android:textColor="@color/white"
+                    android:text="cancel"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_mainname"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="@color/black"
+                    android:text="SUBMIT"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Log IN As Parent"
+        android:textStyle="bold"
+        android:id="@+id/parentbtn"
+        android:layout_gravity="center"
+        android:textSize="24dp"
+        android:layout_margin="10dp"
+        android:fontFamily="sans-serif-condensed"/>
+
+
+
+</LinearLayout>

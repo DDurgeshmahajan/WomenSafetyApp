@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".childjava">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:inputType="textMultiLine"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Tap TO Copy ID"
+        android:textSize="16dp"
+        android:layout_gravity="center"/>
+    <Button
+        android:id="@+id/logoutbtnchild"
+        android:layout_width="wrap_content"
+       android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:text="logout"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#0B0A0A"
+        android:padding="4dp"
+        android:text="Selected Contacts For Emergency="
+        android:textColor="#C8C3C3"
+        android:textSize="20dp"
+        android:textStyle="bold"></TextView>
+
+    <ListView
+        android:id="@+id/selectedlist"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:background="#00938989"></ListView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/servicetxt"
+        android:textSize="16dp"
+        android:layout_margin="20dp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:background="#702323"
+        android:textColor="#C8C3C3"
+        android:text="SERVICE Not STARTED Yet ! Restart APP!"/>
+
+<!--    #486E28 #702323-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:id="@+id/addcontactbtn"
+        android:src="@drawable/glossy_card_background"
+        android:layout_margin="10dp"/>
+
+
+
+</LinearLayout>
