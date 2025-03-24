@@ -179,6 +179,7 @@ public class VolumeButtonService extends Service {
                                         String phoneNumber = extractPhoneNumber(contact);
                                         if (!phoneNumber.isEmpty()) {
                                             smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+
                                             Log.d("Service1", "Emergency SMS sent to: " + phoneNumber);
                                         }
                                     }
@@ -205,7 +206,7 @@ public class VolumeButtonService extends Service {
                         docRef.update("emergencyFlag", "neutral")
                                 .addOnSuccessListener(aVoid1 -> Log.d("VolumeService", "✅ Emergency flag reset to NEUTRAL"))
                                 .addOnFailureListener(e -> Log.e("VolumeService", "❌ Failed to reset emergency flag", e));
-                    }, 5000);
+                    }, 10000);
 
                 }).addOnFailureListener(e -> Log.e("VolumeService", "❌ Failed to update emergency flag in Firebase!", e));
     }

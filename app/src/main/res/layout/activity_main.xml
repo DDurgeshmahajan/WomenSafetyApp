@@ -22,16 +22,17 @@
         android:fontFamily="sans-serif-condensed"/>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:backgroundTint="#000000"
         android:id="@+id/cardofname"
-        android:visibility="gone"
         android:layout_margin="15dp"
         app:cardCornerRadius="25dp"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
+            android:id="@+id/cardofchildlayout"
             android:layout_margin="20dp"
             android:layout_height="wrap_content">
 
@@ -81,6 +82,59 @@
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:visibility="gone"
+            android:id="@+id/cardofparentlayout"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="match_parent"
+                android:hint="Enter the ID"
+                android:textSize="20dp"
+                android:id="@+id/parentID"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="right"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_parentcancel"
+                    android:text="Cancel"
+                    android:background="@drawable/glossy_card_background"
+                    android:gravity="right"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="@color/white"
+                    android:layout_margin="10dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_parentsubmit"
+                    android:text="SUBMIT"
+                    android:gravity="right"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:layout_margin="10dp"/>
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressbar"
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"/>
+
+
+        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
 

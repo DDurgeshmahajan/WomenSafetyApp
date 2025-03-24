@@ -172,6 +172,8 @@ public class childjava extends AppCompatActivity {
             editor.putString("accountid","");
             editor.putString("selected_contacts","");
             editor.apply();
+            Intent serviceIntent = new Intent(getApplicationContext(), VolumeButtonService.class);
+            stopService(serviceIntent);
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
             finish();
         });
