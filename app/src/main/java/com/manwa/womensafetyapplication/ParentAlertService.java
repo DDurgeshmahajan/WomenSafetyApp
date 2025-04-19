@@ -24,7 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import javax.annotation.Nullable;
 
 public class ParentAlertService extends Service {
-    private static final String TAG = "ParentAlertService";
+    private static final String TAG = "VolumeService";
     private static final String CHANNEL_ID = "ParentAlertChannel";
     private MediaPlayer mediaPlayer;
     private FirebaseFirestore firestore;
@@ -34,6 +34,7 @@ public class ParentAlertService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Service Created");
+
 
         // Initialize Firebase Firestore
         firestore = FirebaseFirestore.getInstance();
@@ -118,11 +119,12 @@ public class ParentAlertService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Parent Alert Service Running")
                 .setContentText("Monitoring safety signals...")
-                .setSmallIcon(R.drawable.ic_notification) // Replace with your app's icon
+                .setSmallIcon(R.drawable.glossy_card_background) // Replace with your app's icon
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
 
         startForeground(1, notification);
+        Log.d("VolumeService", "Service started parent");
     }
 
     @Override

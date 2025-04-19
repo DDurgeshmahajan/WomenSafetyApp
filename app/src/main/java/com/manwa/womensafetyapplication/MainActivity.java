@@ -72,11 +72,8 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        }if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NOTIFICATION_POLICY) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.ACCESS_NOTIFICATION_POLICY);
-        }if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.POST_NOTIFICATIONS);
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE) != PackageManager.PERMISSION_GRANTED) {
                 permissionsNeeded.add(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE);

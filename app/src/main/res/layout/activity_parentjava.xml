@@ -40,10 +40,23 @@
         android:layout_margin="20dp"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:background="#702323"
+        android:background="#201717"
         android:textColor="#C8C3C3"
         android:text="SERVICE Not STARTED Yet ! Restart APP!"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alerts : "
+        android:textSize="18dp"
+        android:layout_margin="5dp"
+        android:layout_marginLeft="10dp"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/listofparents"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content">
 
+    </ListView>
 
 
 </LinearLayout>

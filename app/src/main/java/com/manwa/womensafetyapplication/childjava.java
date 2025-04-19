@@ -179,8 +179,9 @@ public class childjava extends AppCompatActivity {
         });
 
         Intent serviceIntent = new Intent(this, VolumeButtonService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForegroundService(new Intent(this, VolumeButtonService.class)
+                    .putExtra("android.service.fg.type", "mediaProjection"));
         } else {
             startService(serviceIntent);
         }

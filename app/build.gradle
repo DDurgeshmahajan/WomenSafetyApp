@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.manwa.womensafetyapplication'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.manwa.womensafetyapplication"
-        minSdk 21
-        targetSdk 34
+        minSdk 24
+        targetSdk 36
         versionCode 1
         versionName "1.0"
 
