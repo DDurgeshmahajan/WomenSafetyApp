@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -158,6 +159,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
+
+//        SmsManager smsManager = SmsManager.getDefault();
+//        smsManager.sendTextMessage("9623146203", null, "hi", null, null);
+//        Log.d("MainActivity", "SMS sent successfully!");
 
         child.setOnClickListener(new View.OnClickListener() {
             @Override

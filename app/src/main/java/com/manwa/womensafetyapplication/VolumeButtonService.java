@@ -3,9 +3,12 @@ package com.manwa.womensafetyapplication;
 import static com.manwa.womensafetyapplication.childjava.PREF_SELECTED_CONTACTS;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -244,6 +247,7 @@ public class VolumeButtonService extends Service {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
+ @SuppressLint("UnspecifiedRegisterReceiverFlag")
  @RequiresPermission(Manifest.permission.VIBRATE)
  private void triggerEmergencyAlert() {
 
@@ -266,53 +270,109 @@ public class VolumeButtonService extends Service {
 // Set emergency flag in Firestore
      docRef.update("emergencyFlag", "red")
              .addOnSuccessListener(aVoid -> {
-                 Log.d("VolumeService", "✅ Emergency flag set to RED");
+                         Log.d("VolumeService", "✅ Emergency flag set to RED");
 
-                 SmsManager smsManager = SmsManager.getDefault();
-                 SharedPreferences contactPrefs = getSharedPreferences("Information", MODE_PRIVATE);
-                 String contactsString = contactPrefs.getString(PREF_SELECTED_CONTACTS, "");
-                 List<String> savedContacts = new ArrayList<>(Arrays.asList(contactsString.split(",")));
+                         SmsManager smsManager = SmsManager.getDefault();
+//                 smsManager.sendTextMessage(phoneNumber, null, message, sentPI, null);
+                         SharedPreferences contactPrefs = getSharedPreferences("Information", MODE_PRIVATE);
+                         String contactsString = contactPrefs.getString(PREF_SELECTED_CONTACTS, "");
+                         List<String> savedContacts = new ArrayList<>(Arrays.asList(contactsString.split(",")));
 
-                 fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                 FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-                 LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
-                         .setMinUpdateIntervalMillis(500)
-                         .build();
+                 LocationRequest locationRequest = LocationRequest.create();
+                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                 locationRequest.setInterval(1000); // 1 second
 
-                 LocationCallback locationCallback = new LocationCallback() {
-                     @Override
-                     public void onLocationResult(LocationResult locationResult) {
-                         if (locationResult != null && !locationResult.getLocations().isEmpty()) {
-                             Location location = locationResult.getLastLocation();
-                             sendEmergencySms(location.getLatitude(), location.getLongitude());
-                             fusedLocationClient.removeLocationUpdates(this);
-                             locationReceived = true;
-                         }
-                     }
-                 };
+                 String message = "I need Help!!!";
+                         if (!contactsString.isEmpty()) {
+                             for (String contact : savedContacts) {
+                                 String phoneNumber = extractPhoneNumber(contact);
+                                 if (!phoneNumber.isEmpty()) {
+                                     try {
 
-                 // Fallback Handler after 5 seconds
-                 Handler fallbackHandler = new Handler(Looper.getMainLooper());
-                 final boolean[] triggeredFallback = {false};
+                                         LocationCallback locationCallback = new LocationCallback() {
+                                             @Override
+                                             public void onLocationResult(LocationResult locationResult) {
+                                                 if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                                                     Location location = locationResult.getLastLocation();
+                                                     Log.d("TAG", "📍Location fetched: " + location);
+                                                     String mapUrl = "https://www.google.com/maps?q=" + location.getLatitude() + "," + location.getLongitude();;
 
-                 fallbackHandler.postDelayed(() -> {
-                     if (!locationReceived) {
-                         triggeredFallback[0] = true;
-                         Log.w("VolumeService", "⚠️ Live location not received, using last known location...");
-                         fusedLocationClient.getLastLocation()
-                                 .addOnSuccessListener(lastLocation -> {
-                                     if (lastLocation != null) {
-                                         sendEmergencySms(lastLocation.getLatitude(), lastLocation.getLongitude());
-                                     } else {
-                                         Log.e("VolumeService", "❌ No last known location available!");
+                                                     String message2 = "I need Help, here=!!!"+mapUrl;
+                                                     try {
+                                                         smsManager.sendTextMessage(phoneNumber, null, message2, null, null);
+                                                         Log.d("VolumeService", "📩 second SMS sent to " + phoneNumber);
+                                                     } catch (Exception e) {
+                                                         Log.e("VolumeService", "❌ Failed to send second SMS to " + phoneNumber, e);
+                                                     }
+                                                     // Optionally stop location updates after first result
+                                                     fusedLocationClient.removeLocationUpdates(this);
+                                                 } else {
+                                                     Log.d("TAG", "📍 LocationResult is empty");
+                                                 }
+                                             }
+                                         };
+
+                                         try {
+                                             smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                                             Log.d("VolumeService", "📩 First SMS sent to " + phoneNumber);
+
+                                             // Now actually request location
+                                             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                                     || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                                                 fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+                                             } else {
+                                                 Log.e("VolumeService", "❌ Location permission not granted");
+                                             }
+
+                                         } catch (Exception e) {
+                                             Log.e("VolumeService", "❌ Failed to send SMS to " + phoneNumber, e);
+                                         }
+
+
+
+                                     } catch (Exception e) {
+                                         Log.e("VolumeService", "❌ Failed to send SMS to " + phoneNumber, e);
                                      }
-                                 })
-                                 .addOnFailureListener(e -> Log.e("VolumeService", "❌ Failed to get last known location", e));
-                     }
-                 }, 5000); // 5 seconds timeout
+                                 }
+                             }
+                         }
+
+
+//                 fallbackHandler.postDelayed(() -> {
+//                     if (!locationReceived) {
+//                         triggeredFallback[0] = true;
+//                         Log.w("VolumeService", "⚠️ Live location not received, using last known location...");
+//                         fusedLocationClient.getLastLocation()
+//                                 .addOnSuccessListener(lastLocation -> {
+//                                     if (lastLocation != null) {
+//
+//                                         if (!contactsString.isEmpty()) {
+//                                             for (String contact : savedContacts) {
+//                                                 String phoneNumber = extractPhoneNumber(contact);
+//                                                 if (!phoneNumber.isEmpty()) {
+//                                                     try {
+//                                                         String message = "🚨 EMERGENCY! Need Help! Location: ";
+//                                                         smsManager.sendTextMessage(phoneNumber, null, message, sentPI, null);
+//                                                         Log.d("VolumeService", "📩 SMS sent to " + phoneNumber);
+//                                                     } catch (Exception e) {
+//                                                         Log.e("VolumeService", "❌ Failed to send SMS to " + phoneNumber, e);
+//                                                     }
+//                                                 }
+//                                             }
+//                                         }
+////                                         sendEmergencySms(lastLocation.getLatitude(), lastLocation.getLongitude());
+//                                     } else {
+//                                         Log.e("VolumeService", "❌ No last known location available!");
+//                                     }
+//                                 })
+//                                 .addOnFailureListener(e -> Log.e("VolumeService", "❌ Failed to get last known location", e));
+//                     }
+//                 }, 5000); // 5 seconds timeout
 
                  // Begin location updates
-                 fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+//                 fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
 
                  // Trigger alert feedback
                  triggerSoundAndVibration();
@@ -352,11 +412,40 @@ public class VolumeButtonService extends Service {
 //        }
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void sendEmergencySms(double latitude, double longitude) {
         String mapUrl = "https://www.google.com/maps?q=" + latitude + "," + longitude;
         String message = "🚨 EMERGENCY! Need Help! Location: " + mapUrl;
         SharedPreferences contactPrefs = getSharedPreferences("Information", MODE_PRIVATE);
         String contactsString = contactPrefs.getString(PREF_SELECTED_CONTACTS, "");
+
+        String SENT = "SMS_SENT";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), PendingIntent.FLAG_IMMUTABLE);
+
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Log.d("SMS", "SMS sent successfully!");
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Log.e("SMS", "❌ Generic failure!");
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Log.e("SMS", "❌ No service!");
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Log.e("SMS", "❌ Null PDU!");
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Log.e("SMS", "❌ Radio off!");
+                        break;
+                }
+            }
+        }, new IntentFilter(SENT));
+
 
         if (!contactsString.isEmpty()) {
             List<String> savedContacts = new ArrayList<>(Arrays.asList(contactsString.split(",")));
@@ -365,7 +454,7 @@ public class VolumeButtonService extends Service {
                 String phoneNumber = extractPhoneNumber(contact);
                 if (!phoneNumber.isEmpty()) {
                     try {
-                        smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                        smsManager.sendTextMessage(phoneNumber, null, message, sentPI, null);
                         Log.d("VolumeService", "📩 SMS sent to " + phoneNumber);
                     } catch (Exception e) {
                         Log.e("VolumeService", "❌ Failed to send SMS to " + phoneNumber, e);
