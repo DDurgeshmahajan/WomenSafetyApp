@@ -122,7 +122,7 @@ public class parentjava extends AppCompatActivity {
                 editor.putString("pass", "");
                 editor.putString("accountid", "");
                 editor.apply();
-                Intent serviceIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent serviceIntent = new Intent(getApplicationContext(), VolumeButtonService.class);
                 stopService(serviceIntent);
                 // Restart the activity
                 finish();
